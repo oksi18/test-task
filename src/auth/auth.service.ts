@@ -19,6 +19,7 @@ export class AuthService {
           name: registerUserDto.name,
           email: registerUserDto.email,
           password: hashedPassword,
+          role: registerUserDto.role,
         },
       });
     } catch (e) {
