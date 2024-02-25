@@ -19,7 +19,6 @@ model User {
   email    String
   password String
   role     Role?
-  Admin    Admin[]
   boss     Boss?   @relation(fields: [bossId], references: [id])
   bossId   String? @db.ObjectId
 }
@@ -30,21 +29,8 @@ model Boss {
   email          String
   password       String
   bossId         String?
-  Admin          Admin[]
   assignUsersIds String[]
   User           User[]
-}
-
-model Admin {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  name     String
-  email    String
-  password String
-  role     Role?
-  boss     Boss   @relation(fields: [bossId], references: [id])
-  user     User   @relation(fields: [userId], references: [id])
-  bossId   String @db.ObjectId
-  userId   String @db.ObjectId
 }
 
 enum Role {

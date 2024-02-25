@@ -3,12 +3,10 @@ import {
   HttpStatus,
   Injectable,
   NotFoundException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma/prisma.service';
 import { CreateBossDto } from './dto/create-boss.dto';
 import * as bcrypt from 'bcrypt';
-import { Boss } from '@prisma/client';
 
 @Injectable()
 export class BossService {
