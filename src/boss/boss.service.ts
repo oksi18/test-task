@@ -143,10 +143,43 @@ export class BossService {
     if (!newBoss) {
       throw new NotFoundException('New boss not found');
     }
+
+    const oldBossId = user.bossId;
+
+    if (oldBossId) {
+      const oldBoss = await this.prismaService.boss.findUnique({
+        where: { id: oldBossId },
+      });
+      if (oldBoss) {
+        const filteredAssignUsersIds = oldBoss.assignUsersIds.filter(
+          (id) => id !== userId,
+        );
+        await this.prismaService.boss.update({
+          where: { id: oldBossId },
+          data: {
+            assignUsersIds: filteredAssignUsersIds,
+          },
+        });
+      }
+    }
+
     await this.prismaService.user.update({
       where: { id: userId },
       data: { bossId: newBossId },
     });
+
+    const newOneBoss = await this.prismaService.boss.findUnique({
+      where: { id: newBossId },
+    });
+    if (newBoss) {
+      const updatedAssignUsersIds = [...newOneBoss.assignUsersIds, userId];
+      await this.prismaService.boss.update({
+        where: { id: newBossId },
+        data: {
+          assignUsersIds: updatedAssignUsersIds,
+        },
+      });
+    }
 
     return { message: "User's boss updated successfully" };
   }
